@@ -1,0 +1,11 @@
+{
+    "name": "labo",
+    "version": "1.0.0",
+    "description": "My home labo.",
+    "scripts": {
+        "format": "prettier --write . && shfmt -w ."
+    },
+    "dependencies": {
+        "prettier": "^3.8.0"
+    }
+}

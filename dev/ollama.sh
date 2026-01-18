@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [[ "$EUID" -ne 0 ]]; then
-    echo "it must be root"
-    exit 1
+	echo "it must be root"
+	exit 1
 fi
 
 curl -fsSL https://ollama.com/install.sh | sh
