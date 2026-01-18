@@ -1,0 +1,26 @@
+services:
+  openwebui:
+    container_name: openwebui
+    image: ghcr.io/open-webui/open-webui:v0.7.2
+    restart: always
+    environment:
+      GLOBAL_LOG_LEVEL: "debug"
+      ENABLE_WEB_SEARCH: true
+        #ENABLE_RAG_LOCAL_WEB_FETCH: True
+        #ENABLE_RAG_WEB_SEARCH: True
+        #RAG_EMBEDDING_ENGINE: "ollama"
+        #RAG_EMBEDDING_MODEL: "kun432/cl-nagoya-ruri-base:latest"
+        #RAG_EMBEDDING_BATCH_SIZE: 1
+      OLLAMA_BASE_URL: "http://192.168.3.153:11434"
+      RAG_OLLAMA_BASE_URL: "http://192.168.3.153:11434"
+      CHUNK_SIZE: 500
+      CHUNK_OVERLAP: 50
+        #RAG_WEB_SEARCH_ENGINE: "searxng"
+        #RAG_WEB_SEARCH_RESULT_COUNT: 3
+        #RAG_WEB_SEARCH_CONCURRENT_REQUESTS: 10
+    ports:
+      - "3000:8080"
+    volumes:
+      - ./data:/app/backend/data
+        #extra_hosts:
+        #- host.docker.internal:host-gateway

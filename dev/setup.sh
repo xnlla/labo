@@ -1,7 +1,10 @@
 #!/bin/bash
 
+ROOTPATH=$(pwd)
+cd $ROOTPATH
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-	echo "follow command: source ./devsetup.sh"
+	echo "follow command: source ./setup.sh"
 	exit 1
 fi
 
@@ -19,6 +22,7 @@ docker_setup() {
 		sudo wget https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose
 		sudo chmod +x /usr/local/bin/docker-compose
 	fi
+	echo '{"dns": ["8.8.8.8", "8.8.4.4"]}' | sudo tee /etc/docker/daemon.json
 
 	docker --version
 	docker-compose --version
@@ -86,6 +90,29 @@ pyenv_setup() {
 	pip --version
 }
 
+git_configure() {
+	git config --global core.editor vim
+	git config --global sequence.editor vim
+}
+
+gituclone_setup() {
+	rm -rf /tmp/gitUclone
+	git clone -b v1 https://github.com/nekono-dev/gitUclone.git /tmp/gitUclone
+	chmod +x /tmp/gitUclone/src/git-uclone.sh
+	sudo cp /tmp/gitUclone/src/git-uclone.sh /usr/local/bin/git-uclone
+
+	## configure myself
+	git uclone --setup --user nlla --key ~/.ssh/id_ed25519 --email 156630485+xnlla@users.noreply.github.com
+}
+
+fix_grub() {
+	sudo sed -i.bak \
+		-e 's/^GRUB_TIMEOUT_STYLE=.*/GRUB_TIMEOUT_STYLE=menu/' \
+		-e 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=5/' \
+		/etc/default/grub
+	sudo update-grub
+}
+
 echo "------ Devtools setup ------"
 dev_tools
 echo ""
@@ -105,6 +132,10 @@ echo ""
 echo "------ Docker setup ------"
 docker_setup
 echo ""
+
+echo "------ Git configure ------"
+git_configure
+gituclone_setup
 
 echo "------ All done! ------"
 echo "follow command: sudo reboot"
