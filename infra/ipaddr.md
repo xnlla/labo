@@ -8,6 +8,6 @@
 | .122 | Win11Pro BM             |
 | .123 | Proxmox Hyper-v on .122 |
 | .140 | Printer                 |
-| .151 | DevServer Ubuntu 24.04  |
+| .152 | DevServer Ubuntu 24.04  |
 | .153 | Ollama Ubuntu 24.04     |
 | .200 | AppServer Ubuntu 24.04  |
