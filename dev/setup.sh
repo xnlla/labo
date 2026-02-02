@@ -113,6 +113,37 @@ fix_grub() {
 	sudo update-grub
 }
 
+code_setup() {
+	# install code server
+	sudo snap install code --classic
+	sudo cp ./code-serveweb.service /usr/lib/systemd/system/code-serveweb.service
+	sudo systemctl daemon-reload
+	sudo systemctl enable --now code-serveweb.service
+
+	# Add cloudflare gpg key
+	sudo mkdir -p --mode=0755 /usr/share/keyrings
+	curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | sudo tee /usr/share/keyrings/cloudflare-public-v2.gpg >/dev/null
+
+	# Add this repo to your apt repositories
+	echo 'deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.cloudflare.com/cloudflared any main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
+
+	# install cloudflared
+	sudo apt-get update && sudo apt-get install cloudflared -y
+	systemctl is-enabled cloudflared.service >/dev/null 2>&1
+	if [ $? -eq 0 ]; then
+		echo "cloudflared service is already enabled"
+	else
+		sudo cloudflared service install $(cat ./code/code.secret)
+	fi
+
+	## for use host environment, no use docker
+	# mv ./code.secret ./code/code.secret
+	# cp -r ./code $HOME
+	# pushd $HOME/code
+	# docker-compose up -d
+	# popd
+}
+
 echo "------ Devtools setup ------"
 dev_tools
 echo ""
@@ -126,7 +157,7 @@ pyenv_setup
 echo ""
 
 echo "------ Code setup ------"
-sudo snap install --classic code
+code_setup
 echo ""
 
 echo "------ Docker setup ------"

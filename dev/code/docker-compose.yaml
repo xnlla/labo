@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  cloudflare:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN_FILE: /code/code.secret
+    volumes:
+      - ./:/code/:ro
+  code:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - /home/ubuntu/git:/workspace

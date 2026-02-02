@@ -1,0 +1,13 @@
+FROM ubuntu:24.04
+    
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install -y curl && \
+    curl -Lk https://go.microsoft.com/fwlink/?LinkID=760868 --output code.deb && \
+    apt install -y ./code.deb && \
+    rm code.deb
+
+EXPOSE 8000
+WORKDIR /workspace
+# Use JSON array form so arguments are passed correctly
+ENTRYPOINT ["/usr/bin/code"]
+CMD ["--no-sandbox", "--user-data-dir", "/workspace", "serve-web", "--host", "0.0.0.0", "--without-connection-token"]

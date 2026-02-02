@@ -1,0 +1,13 @@
+[Unit]
+Description=VS Code Serve Web (code serve-web)
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/snap/code/current/usr/share/code/bin/code serve-web --host 0.0.0.0 --without-connection-token
+Restart=on-failure
+RestartSec=5
+Environment=DISPLAY=
+
+[Install]
+WantedBy=multi-user.target
