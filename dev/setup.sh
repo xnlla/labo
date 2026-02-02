@@ -116,7 +116,7 @@ fix_grub() {
 code_setup() {
 	# install code server
 	sudo snap install code --classic
-	sudo cp ./code-serveweb.service /usr/lib/systemd/system/code-serveweb.service
+	sudo cp ./code-serveweb.service /etc/systemd/system/code-serveweb.service
 	sudo systemctl daemon-reload
 	sudo systemctl enable --now code-serveweb.service
 

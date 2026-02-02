@@ -4,7 +4,10 @@ After=network.target
 
 [Service]
 Type=simple
+WorkingDirectory=/home/ubuntu/git/
 ExecStart=/snap/code/current/usr/share/code/bin/code serve-web --host 0.0.0.0 --without-connection-token
+User=ubuntu
+Group=ubuntu
 Restart=on-failure
 RestartSec=5
 Environment=DISPLAY=
